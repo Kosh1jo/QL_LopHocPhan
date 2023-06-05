@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Thêm mới sinh viên";
+}
+
+<form id="form_act" enctype="multipart/form-data" method="post">
+    <div class="card-body">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Mã số sinh viên</label>
+            <input type="text" name="MSSV" class="form-control" id="MSSV" placeholder="Nhập MSSV">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Họ tên</label>
+            <input type="text" name="HoTen" class="form-control" id="HoTen" placeholder="Nhập Họ tên sinh viên">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Địa chỉ</label>
+            <input type="text" name="DiaChi" class="form-control" id="MSSV" placeholder="Nhập Địa chỉ">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Khóa học</label>
+            <input type="text" name="KhoaHoc" class="form-control" id="KhoaHoc" placeholder="Nhập Khóa học">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Lớp quản lý</label>
+            <input type="text" name="LopQuanLy" class="form-control" id="LopQuanLy" placeholder="Nhập Lớp quản lý">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Ngày sinh</label>
+            <input type="date" name="NgaySinh" class="form-control" id="NgaySinh" placeholder="Nhập Ngày sinh">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Giới tính</label>
+            <select class="form-control" id="Gioitinh" name="Gioitinh">
+                <option value="Nam">Nam</option>
+                <option value="Nu">Nữ</option>
+                <option value="Khac">Khác</option>
+            </select>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        <button type="button" id="btn_insert" class="btn btn-primary">Thêm mới</button>
+    </div>
+</form>
+<script>
+    function Create() {
+        if (confirm("Xác nhận thêm sinh viên")) {
+            let form = $('#form_act')[0];
+            let formData = new FormData(form);
+            console.log(formData);
+            $.ajax({
+                url: "/Sinhvien/PostCreate",
+                method: "POST",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (result, status, xhr) {
+                    let rs = JSON.parse(result);
+                    console.log(rs);
+                    if (rs.ErrCode == 1) {
+                        toastr.success(rs.Message);
+                        //window.location.href = '@*@Url.Action("Index", "SinhVien")*@';
+                    } else {
+                        toastr.error(rs.Message);
+                    }
+                },
+                error: function () {
+                    console.log("Mất kết nối với máy chủ!");
+                }
+            });
+        }
+    }
+    $(function () {
+        $('#btn_insert').click(function () {
+            Create();
+        });
+    });
+</script>
+
