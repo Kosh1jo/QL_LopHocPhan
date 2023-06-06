@@ -25,16 +25,80 @@ namespace QL_LopHocPhan.Controllers
             int pageSizeValue = Convert.ToInt32(pageSize);
             int currentPageValue = Convert.ToInt32(currentPage);
             int skip = (currentPageValue - 1) * pageSizeValue;
-            int totalCount = db.tbl_SinhViens.Count();
-            int totalPages = (int)Math.Ceiling((double)totalCount / pageSizeValue);
-            var dssv = db.tbl_SinhViens.Skip(skip).Take(pageSizeValue).ToList();
+
+            List<tbl_SinhVien> dssv = new List<tbl_SinhVien>();
             List<SinhVien_ett> list = new List<SinhVien_ett>();
-            for (int i = 0; i < dssv.Count; i++)
+            if (keywords!="" && orderby!="")
             {
-                SinhVien_ett obj = new SinhVien_ett(dssv[i]);
-                obj.STT = Convert.ToString(skip + i + 1);
-                list.Add(obj);
+                switch (orderby)
+                {
+                    case "0":
+                        dssv = db.tbl_SinhViens.ToList();
+                        for (int i = 0; i < dssv.Count; i++)
+                        {
+                            SinhVien_ett obj = new SinhVien_ett(dssv[i]);
+                            obj.STT = Convert.ToString(skip + i + 1);
+                            list.Add(obj);
+                        }
+                        list = list.Skip(skip).Take(pageSizeValue).ToList();
+                        break;
+                    case "1":
+                        dssv = db.tbl_SinhViens.Where(o=>o.MSSV.Contains(keywords)).ToList();
+                        for (int i = 0; i < dssv.Count; i++)
+                        {
+                            SinhVien_ett obj = new SinhVien_ett(dssv[i]);
+                            obj.STT = Convert.ToString(skip + i + 1);
+                            list.Add(obj);
+                        }
+                        list = list.Skip(skip).Take(pageSizeValue).ToList();
+                        break;
+                    case "2":
+                        dssv = db.tbl_SinhViens.Where(o => o.HoTen.Contains(keywords)).ToList();
+                        for (int i = 0; i < dssv.Count; i++)
+                        {
+                            SinhVien_ett obj = new SinhVien_ett(dssv[i]);
+                            obj.STT = Convert.ToString(skip + i + 1);
+                            list.Add(obj);
+                        }
+                        list = list.Skip(skip).Take(pageSizeValue).ToList();
+                        break;
+                    case "3":
+                        dssv = db.tbl_SinhViens.Where(o => o.DiaChi.Contains(keywords)).ToList();
+                        for (int i = 0; i < dssv.Count; i++)
+                        {
+                            SinhVien_ett obj = new SinhVien_ett(dssv[i]);
+                            obj.STT = Convert.ToString(skip + i + 1);
+                            list.Add(obj);
+                        }
+                        list = list.Skip(skip).Take(pageSizeValue).ToList();
+                        break;
+                    case "4":
+                        //Tim kiếm theo ngày sinh
+                        //dssv = db.tbl_SinhViens.Where(o => o.DiaChi.Contains(keywords)).ToList();
+                        //for (int i = 0; i < dssv.Count; i++)
+                        //{
+                        //    SinhVien_ett obj = new SinhVien_ett(dssv[i]);
+                        //    obj.STT = Convert.ToString(skip + i + 1);
+                        //    list.Add(obj);
+                        //}
+                        //list = list.Skip(skip).Take(pageSizeValue).ToList();
+                        break;
+                    case "5":
+                        dssv = db.tbl_SinhViens.Where(o => o.GioiTinh.Contains(keywords)).ToList();
+                        for (int i = 0; i < dssv.Count; i++)
+                        {
+                            SinhVien_ett obj = new SinhVien_ett(dssv[i]);
+                            obj.STT = Convert.ToString(skip + i + 1);
+                            list.Add(obj);
+                        }
+                        list = list.Skip(skip).Take(pageSizeValue).ToList();
+                        break;
+                }
             }
+            
+            int totalCount = list.Count();
+            int totalPages = (int)Math.Ceiling((double)totalCount / pageSizeValue);
+
             var result = new
             {
                 Data = list,

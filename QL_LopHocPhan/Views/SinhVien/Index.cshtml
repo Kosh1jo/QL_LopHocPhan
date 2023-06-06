@@ -17,29 +17,31 @@
 </style>
 @{
     ViewBag.Title = "Danh sách sinh viên";
-
+    string keyword = Request["keyword"];
+    string sortOrder = Request["sortOrder"];
+    string orderBy = Request["orderBy"];
 }
 
 <section class="content">
     <div class="container-fluid">
         <h2 class="text-center display-4">Enhanced Search</h2>
-        
+        <form action="" id="searchPaging" method="get">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
-                    <div class="row d-flex justify-content-center">
+                    <div class="row d-flex justify-content-end">
                         <div class="col-1">
                             <div class="form-group">
                                 <label>PageSize</label>
-                                <input name="pageSize" id="pageSize" onchange="updatePageSize()" class="form-control form-control-md" style="width: 100%;" aria-hidden="true" value="">
+                                <input id="pageSize" onchange="updatePageSize()" class="form-control form-control-md" style="width: 100%;" aria-hidden="true" value="">
                             </div>
                         </div>
                         <div class="col-1">
                             <div class="form-group">
                                 <label>Sort Order:</label>
                                 <select name="sortOrder" id="sortOrder" class="form-control form-control-md" style="width: 100%;" aria-hidden="true">
-                                    <option value="0">Type</option>
-                                    <option value="1">ASC</option>
-                                    <option value="2">DESC</option>
+                                    <option value="0" @(sortOrder =="0" ? "selected":"")>Type</option>
+                                    <option value="1" @(sortOrder =="1" ? "selected":"")>ASC</option>
+                                    <option value="2" @(sortOrder =="2" ? "selected":"")>DESC</option>
                                 </select>
                             </div>
                         </div>
@@ -47,31 +49,30 @@
                             <div class="form-group">
                                 <label>Order By:</label>
                                 <select name="orderBy" id="orderBy" class="form-control form-control-md" style="width: 100%;" aria-hidden="true">
-                                    <option value="0">Type</option>
-                                    <option value="1">MSSV</option>
-                                    <option value="2">Họ và Tên</option>
-                                    <option value="3">Địa chỉ</option>
-                                    <option value="4">Ngày sinh</option>
-                                    <option value="5">Giới tính</option>
+                                    <option value="0"@(orderBy =="0" ? "selected":"")>Type</option>
+                                    <option value="1"@(orderBy =="1" ? "selected":"")>MSSV</option>
+                                    <option value="2"@(orderBy =="2" ? "selected":"")>Họ và Tên</option>
+                                    <option value="3"@(orderBy =="3" ? "selected":"")>Địa chỉ</option>
+                                    <option value="4"@(orderBy =="4" ? "selected":"")>Ngày sinh</option>
+                                    <option value="5"@(orderBy =="5" ? "selected":"")>Giới tính</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <form action="" id="searchPaging" method="get">
-                        <div class="form-group">
-                            <div class="input-group input-group-lg">
-                                <input id="keyword" type="search" class="form-control form-control-lg" placeholder="Type your keywords here" value="">
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-lg btn-default">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
+
+                    <div class="form-group">
+                        <div class="input-group input-group-lg">
+                            <input name="keyword" id="keyword" type="search" class="form-control form-control-lg" placeholder="Type your keywords here" value="@keyword">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-lg btn-default">
+                                    <i class="fa fa-search"></i>
+                                </button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        
+        </form>
     </div>
 </section>
 <table id="tbl_data">
@@ -92,15 +93,20 @@
 <script>
     var defaultPageSize = 2; // Giá trị mặc định cho pageSize
     var currentpageSize = defaultPageSize; // Giá trị hiện tại của pageSize
-
     function getList(page) {
         var pageSize = currentpageSize;
         var currentPage = page != undefined ? page : 1;
+        var kw = $('#keyword').val();
+        var ob = $('#orderBy').val();
+        var sb = $('#sortOrder').val();
         console.log(currentPage);
+        console.log(kw);
+        console.log(ob);
+        console.log(sb);
         $.ajax({
             url: "/SinhVien/SearchPaging",
             method: "POST",
-            data: { currentPage, pageSize},
+            data: { currentPage, pageSize, orderBy: ob, keywords: kw, sortOrder: sb },
             success: function (result) {
                 var obj = JSON.parse(result);
                 console.log(obj);

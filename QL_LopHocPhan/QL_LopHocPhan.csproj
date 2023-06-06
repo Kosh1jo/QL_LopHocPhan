@@ -116,6 +116,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\EnumSortOrder.cs" />
+    <Compile Include="Models\EnumOrderBy.cs" />
     <Compile Include="Models\SinhVien_ett.cs" />
     <Compile Include="Models\Database.designer.cs">
       <AutoGen>True</AutoGen>
