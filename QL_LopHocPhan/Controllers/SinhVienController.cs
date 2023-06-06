@@ -20,10 +20,28 @@ namespace QL_LopHocPhan.Controllers
         }
 
         //Lấy ra danh sách sinh viên
-        public string GetList()
+        public string SearchPaging(string orderby,string sortOrder,string pageSize,string keywords,string currentPage)
         {
-            var dssv = db.tbl_SinhViens;
-            return JsonConvert.SerializeObject(dssv);
+            int pageSizeValue = Convert.ToInt32(pageSize);
+            int currentPageValue = Convert.ToInt32(currentPage);
+            int skip = (currentPageValue - 1) * pageSizeValue;
+            int totalCount = db.tbl_SinhViens.Count();
+            int totalPages = (int)Math.Ceiling((double)totalCount / pageSizeValue);
+            var dssv = db.tbl_SinhViens.Skip(skip).Take(pageSizeValue).ToList();
+            List<SinhVien_ett> list = new List<SinhVien_ett>();
+            for (int i = 0; i < dssv.Count; i++)
+            {
+                SinhVien_ett obj = new SinhVien_ett(dssv[i]);
+                obj.STT = Convert.ToString(skip + i + 1);
+                list.Add(obj);
+            }
+            var result = new
+            {
+                Data = list,
+                TotalCount = totalCount,
+                TotalPages = totalPages
+            };
+            return JsonConvert.SerializeObject(result);
         }
         public ActionResult Create()
         {
