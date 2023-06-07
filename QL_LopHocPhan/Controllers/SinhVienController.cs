@@ -25,10 +25,11 @@ namespace QL_LopHocPhan.Controllers
             int pageSizeValue = Convert.ToInt32(pageSize);
             int currentPageValue = Convert.ToInt32(currentPage);
             int skip = (currentPageValue - 1) * pageSizeValue;
-
+            int totalCount=0;
             List<tbl_SinhVien> dssv = new List<tbl_SinhVien>();
             List<SinhVien_ett> list = new List<SinhVien_ett>();
-            if (keywords!="" && orderby!="")
+            List<SinhVien_ett> newlist = new List<SinhVien_ett>();
+            if (keywords!="")
             {
                 switch (orderby)
                 {
@@ -40,6 +41,28 @@ namespace QL_LopHocPhan.Controllers
                             obj.STT = Convert.ToString(skip + i + 1);
                             list.Add(obj);
                         }
+                        totalCount = list.Count();
+                        if (sortOrder!="")
+                        {
+                            switch (sortOrder)
+                            {
+                                case "0":case "1":
+                                    newlist = list.OrderBy(x => x.STT).ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                                case "2":
+                                    newlist = list.OrderBy(x => x.STT).Reverse().ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                            }
+                            list = newlist;
+                        }
                         list = list.Skip(skip).Take(pageSizeValue).ToList();
                         break;
                     case "1":
@@ -49,6 +72,29 @@ namespace QL_LopHocPhan.Controllers
                             SinhVien_ett obj = new SinhVien_ett(dssv[i]);
                             obj.STT = Convert.ToString(skip + i + 1);
                             list.Add(obj);
+                        }
+                        totalCount = list.Count();
+                        if (sortOrder != "")
+                        {
+                            switch (sortOrder)
+                            {
+                                case "0":
+                                case "1":
+                                    newlist = list.OrderBy(x => x.MSSV).ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                                case "2":
+                                    newlist = list.OrderBy(x => x.MSSV).Reverse().ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                            }
+                            list = newlist;
                         }
                         list = list.Skip(skip).Take(pageSizeValue).ToList();
                         break;
@@ -60,6 +106,29 @@ namespace QL_LopHocPhan.Controllers
                             obj.STT = Convert.ToString(skip + i + 1);
                             list.Add(obj);
                         }
+                        totalCount = list.Count();
+                        if (sortOrder != "")
+                        {
+                            switch (sortOrder)
+                            {
+                                case "0":
+                                case "1":
+                                    newlist = list.OrderBy(x => x.HoTen).ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                                case "2":
+                                    newlist = list.OrderBy(x => x.HoTen).Reverse().ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                            }
+                            list = newlist;
+                        }
                         list = list.Skip(skip).Take(pageSizeValue).ToList();
                         break;
                     case "3":
@@ -69,6 +138,29 @@ namespace QL_LopHocPhan.Controllers
                             SinhVien_ett obj = new SinhVien_ett(dssv[i]);
                             obj.STT = Convert.ToString(skip + i + 1);
                             list.Add(obj);
+                        }
+                        totalCount = list.Count();
+                        if (sortOrder != "")
+                        {
+                            switch (sortOrder)
+                            {
+                                case "0":
+                                case "1":
+                                    newlist = list.OrderBy(x => x.DiaChi).ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                                case "2":
+                                    newlist = list.OrderBy(x => x.DiaChi).Reverse().ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                            }
+                            list = newlist;
                         }
                         list = list.Skip(skip).Take(pageSizeValue).ToList();
                         break;
@@ -91,12 +183,174 @@ namespace QL_LopHocPhan.Controllers
                             obj.STT = Convert.ToString(skip + i + 1);
                             list.Add(obj);
                         }
+                        totalCount = list.Count();
+                        if (sortOrder != "")
+                        {
+                            switch (sortOrder)
+                            {
+                                case "0":
+                                case "1":
+                                    newlist = list.OrderBy(x => x.GioiTinh).ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                                case "2":
+                                    newlist = list.OrderBy(x => x.GioiTinh).Reverse().ToList();
+                                    for (int i = 0; i < newlist.Count; i++)
+                                    {
+                                        newlist[i].STT = Convert.ToString(skip + i + 1);
+                                    }
+                                    break;
+                            }
+                            list = newlist;
+                        }
                         list = list.Skip(skip).Take(pageSizeValue).ToList();
                         break;
                 }
+            }else
+            {
+
+                dssv = db.tbl_SinhViens.ToList();
+                for (int i = 0; i < dssv.Count; i++)
+                {
+                    SinhVien_ett obj = new SinhVien_ett(dssv[i]);
+                    obj.STT = Convert.ToString(skip + i + 1);
+                    list.Add(obj);
+                }
+                totalCount = list.Count();
+                switch (orderby)
+                {
+                    case "0":
+                        switch (sortOrder)
+                        {
+                            case "0":
+                            case "1":
+                                newlist = list.OrderBy(x => x.STT).ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                            case "2":
+                                newlist = list.OrderBy(x => x.STT).Reverse().ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                        }
+                        list = newlist;
+                        break;
+                    case "1":
+                        switch (sortOrder)
+                        {
+                            case "0":
+                            case "1":
+                                newlist = list.OrderBy(x => x.MSSV).ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                            case "2":
+                                newlist = list.OrderBy(x => x.MSSV).Reverse().ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                        }
+                        list = newlist;
+                        break;
+                    case "2":
+                        switch (sortOrder)
+                        {
+                            case "0":
+                            case "1":
+                                newlist = list.OrderBy(x => x.HoTen).Reverse().ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                            case "2":
+                                newlist = list.OrderBy(x => x.HoTen).ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                        }
+                        list = newlist;
+                        break;
+                    case "3":
+                        switch (sortOrder)
+                        {
+                            case "0":
+                            case "1":
+                                newlist = list.OrderBy(x => x.DiaChi).ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                            case "2":
+                                newlist = list.OrderBy(x => x.DiaChi).Reverse().ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                        }
+                        list = newlist;
+                        break;
+                    case "4":
+                        switch (sortOrder)
+                        {
+                            case "0":
+                            case "1":
+                                newlist = list.OrderBy(x => x.NgaySinh).ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                            case "2":
+                                newlist = list.OrderBy(x => x.NgaySinh).Reverse().ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                        }
+                        list = newlist;
+                        break;
+                    case "5":
+                        switch (sortOrder)
+                        {
+                            case "0":
+                            case "1":
+                                newlist = list.OrderBy(x => x.GioiTinh).ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                            case "2":
+                                newlist = list.OrderBy(x => x.GioiTinh).Reverse().ToList();
+                                for (int i = 0; i < newlist.Count; i++)
+                                {
+                                    newlist[i].STT = Convert.ToString(skip + i + 1);
+                                }
+                                break;
+                        }
+                        list = newlist;
+                        break;
+                }
+                list = list.Skip(skip).Take(pageSizeValue).ToList();
             }
-            
-            int totalCount = list.Count();
             int totalPages = (int)Math.Ceiling((double)totalCount / pageSizeValue);
 
             var result = new
