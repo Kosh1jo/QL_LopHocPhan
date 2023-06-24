@@ -20,6 +20,7 @@
     string keyword = Request["keyword"];
     string sortOrder = Request["sortOrder"];
     string orderBy = Request["orderBy"];
+    string pageSize = Request["pageSize"];
 }
 
 <section class="content">
@@ -32,7 +33,7 @@
                         <div class="col-1">
                             <div class="form-group">
                                 <label>PageSize</label>
-                                <input id="pageSize" onchange="updatePageSize()" class="form-control form-control-md" style="width: 100%;" aria-hidden="true" value="">
+                                <input name="pageSize" id="pageSize" @*onchange="updatePageSize()"*@ class="form-control form-control-md" style="width: 100%;" aria-hidden="true" value="@pageSize">
                             </div>
                         </div>
                         <div class="col-1">
@@ -90,8 +91,12 @@
      </div>
 </div>
 <script>
-    var defaultPageSize = 2; // Giá trị mặc định cho pageSize
-    var currentpageSize = defaultPageSize; // Giá trị hiện tại của pageSize
+
+    var currentpageSize = parseInt($('#pageSize').val());
+    if (isNaN(currentpageSize) || currentpageSize < 0) {
+        currentpageSize = 2;
+    }
+    
     function getList(page) {
         var pageSize = currentpageSize;
         var currentPage = page != undefined ? page : 1;
@@ -99,6 +104,7 @@
         var ob = $('#orderBy').val();
         var sb = $('#sortOrder').val();
         console.log(currentPage);
+        console.log(currentpageSize);
         console.log(kw);
         console.log(ob);
         console.log(sb);
@@ -243,16 +249,19 @@
             });
         }
     }
-    function updatePageSize() {
+    //function updatePageSize() {
+    //    var newPageSize = parseInt($('#pageSize').val());
+    //    if (!isNaN(newPageSize) && newPageSize > 0) {
+    //        currentpageSize = newPageSize;
+    //        getList(); // Gọi lại hàm getList để tải lại dữ liệu với pageSize mới
+    //    }
+    //}
+    $(function () {
         var newPageSize = parseInt($('#pageSize').val());
         if (!isNaN(newPageSize) && newPageSize > 0) {
             currentpageSize = newPageSize;
-            getList(); // Gọi lại hàm getList để tải lại dữ liệu với pageSize mới
         }
-    }
-    $(function () {
-        currentpageSize = defaultPageSize; // Đặt giá trị mặc định cho pageSize
-        $('#pageSize').val(currentpageSize); // Đặt giá trị mặc định cho trường input pageSize
+        $('#pageSize').val(currentpageSize); // Đặt giá trị cho trường input pageSize
         getList();
     });
 </script>
